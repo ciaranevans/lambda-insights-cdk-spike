@@ -1,4 +1,4 @@
-from aws_cdk import aws_lambda, aws_lambda_python, aws_logs, aws_s3, core
+from aws_cdk import aws_iam, aws_lambda, aws_lambda_python, aws_logs, aws_s3, core
 
 
 class LambdaInsightsStack(core.Stack):
@@ -22,6 +22,16 @@ class LambdaInsightsStack(core.Stack):
             timeout=core.Duration.minutes(15),
             runtime=aws_lambda.Runtime.PYTHON_3_8,
             environment={"BUCKET": bucket.bucket_name},
+            layers=[
+                aws_lambda.LayerVersion.from_layer_version_arn(
+                    self,
+                    id=f"lambda-insights-extension-{identifier}",
+                    layer_version_arn=(
+                        "arn:aws:lambda:us-west-2:580247275435:"
+                        "layer:LambdaInsightsExtension:14"
+                    ),
+                )
+            ],
         )
 
         aws_logs.LogGroup(
@@ -33,3 +43,14 @@ class LambdaInsightsStack(core.Stack):
         )
 
         bucket.grant_read_write(putter)
+
+        putter.role.add_managed_policy(
+            aws_iam.ManagedPolicy.from_managed_policy_arn(
+                self,
+                id=f"cloudwatch-lambda-insights-policy-{identifier}",
+                managed_policy_arn=(
+                    "arn:aws:iam::aws:policy/"
+                    "CloudWatchLambdaInsightsExecutionRolePolicy"
+                ),
+            )
+        )
