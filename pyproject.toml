@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "lambda-insights-cdk-spike"
+version = "0.1.0"
+description = "'Quick' Spike to investigate using Lambda Insights within CloudWatch (Via CDK)"
+authors = ["Ciaran Evans <ciaran@developmentseed.org>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+"aws-cdk.core" = "==1.98.0"
+"aws-cdk.aws-lambda" = "==1.98.0"
+"aws-cdk.aws-lambda-python" = "==1.98.0"
+"aws-cdk.aws-cloudwatch" = "==1.98.0"
+python-dotenv = "^0.17.0"
+
+[tool.poetry.dev-dependencies]
+isort = "==5.8.0"
+flake8 = "==3.9.0"
+black = "==20.8b1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
